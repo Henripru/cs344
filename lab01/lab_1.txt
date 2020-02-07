@@ -1,0 +1,37 @@
+// b. 
+i. Is the GPS problem solver implemented as a class or as a function?
+The GPS problem solver is implemented as a function.
+
+ii. The solver requires initial states, goal states and operators. Of what type are these objects?
+initial states is a string array of state names
+goal states is a string array of final state names
+operators is an array of action objects which describe what happens when.
+
+iii. Is the mechanism recursive? If so, how does it implement its recursion?
+Yes. The mechanism is recursive. It implements this through the apply_operator function which calls the achieve_all function which calls the achieve function which loops back to apply_operator.
+
+// d. 
+i. What famous puzzle does this code model and what are the rules of that puzzle? Does the code faithfully implement the puzzle?
+This code models the Monkey and Banana Problem. The rules of the puzzle are that the monkey must use the chair to reach the bananas and eat them. The code does implement the puzzle. 
+
+ii. What components does each domain action specify?
+each domain action specifies
+- the name of the action
+- the list of preconditions
+- the list of states to add
+- the list of states to remove
+
+iii. How does the GPS mechanism solve the problem? Be prepared to specify this in detail. You can use the logging feature to print a trace of the mechanism’s deliberations.
+1. Adds 'Executing ' word to each operation name.
+2. Tries to achieve the first goal 'not hungry'
+3. Checks to make sure goal is not already achieved in state array or goal_stack.
+4. Applies the first operator which makes that goal achieved.
+5. This starts a recursive chain of events that will continuously try to get preconditions
+    that are loaded to the state array satisfied. 
+6. When all initial conditions are met. The Gps knows it has a solution and outputs it.
+
+iv. Is this code artificially intelligent? If so, which definition (or definitions) of AI from the text does it satisfy?
+Yes. It fits the approach that AI can "think logically"
+
+v. Would a monkey who/that solves the problem in the real world be displaying intelligence?
+Yes. 
