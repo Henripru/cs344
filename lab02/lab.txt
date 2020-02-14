@@ -1,0 +1,41 @@
+Exercise 2.1
+
+a. Both the Hill-Climbing and Simulated-Annealing solutions solved the problem perfectly.
+
+b. The Hill-Climbing solution theoretically works more quickly
+
+c. The starting value does not make any difference. Both searches will always move towards a better state.
+
+d. Changing the delta step value changes the resolution of the search that the algorithms can make. If the step size is too big, each algorithm will end up hopping over the peak and will rarely find the maximum value.
+
+e. The exp_schedule() method reduces the step size over time so that the search can become more and more precise.
+
+
+Exercise 2.2
+
+a. The Simulated-Annealing algorithm does much better than the Hill-Climbing algorithm. This is because the Hill-Climbing algorithm can only find local maximums based on which trough its initial state is set in. On the other hand, the Simulated-Annealing can jump out of the different troughs and (possibly) get into the trough that has the global maximum. 
+
+b. The starting value does make a difference for the Hill-Climbing algorithm. If the initial value happens to be located at the trough in which the global maximum is located, then the max value will be found. Otherwise, some smaller value will be found. 
+
+c. Modifying the step size does effect the operation of the two algorithms. If you make the step size big enough, the Hill-Climbing algorithm can actually hop out of different troughs and possibly find the global max value. The Simulated-Annealing is also affected and gets more inaccurate as step size increases as it still can manage to get stuck in different troughs (although much less often than hill climbing at lower deltas.)
+
+d. The maximum value = 30. The minimum value = 0. The Hill-Climbing algorithm on scores around 13 vs the Simulated-Annealing algorithm which scores around 21-22
+
+
+2.3
+
+a. Both algorithms improve dramatically with random restarts implemented. This is because we are running the algorithm with different initial locations and saving the best option after each run. The score will improve if a better solution has been found. With enough attempts, we can even get lucky and land the inital point on the global maximum. Random restarts are very helpful for the local search Hill-Climbing algorithm. The Simulated-Annealing also gets better because with more searches the probability of randomly minimizing on the global maximum also goes up. Both algorithms got the global maximum with random restarts.
+
+b. The average for the Hill-Climbing solution was 13.77. The average for the Simulated Annealing was 19.01
+
+c. The simulated annealing algorithm does better becase the way it is written allows it to get out of troughs it initially starts in so that it can move to a potentially better trough. The local search hurts because if it is started in the wrong trough, it will only ever find the local maximum of that trough and not attempt a crazy jump to a better location because with the step size that it uses, it cant see a better option.
+
+2.4
+
+a. The local beam search makes the most sense for simulated annealing because when implemented with simulated annealing, the search is more likely to find the global maximum than it would be to find one using the Hill-Climbing.
+
+b. I don't think it would be unreasonable to maintain 1000-10000 states. The search is not recursive, but rather iterative, so it wouldn't take forever to compute with that many states. 
+
+c. To modify the code to implement beam search, I would implement k = 1000 states randomly computed, choose the best state from the generated list, move to the state if it is better than the current one, and then repeat.
+This is different to random restarts in that instead of running the algorithms at of different initial positions, we are changing the actual method used to take a step inside the algorithm.
+ 
