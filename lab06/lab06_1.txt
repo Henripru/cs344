@@ -1,0 +1,23 @@
+Exercise 6.1 
+
+Information Gain by Hungry
+
+Gain(Hungry) = B(p/(p+n)) - Remainder(Hungry);
+
+But since p(positives) == n(negatives) == 6;
+B(0.5) = 0.5*log(0.5)/log(2) + 0.5*log(0.5)/log(2) = 1;
+so B(0.5) = 1; 
+
+and Gain(Hungry) = 1 - Remainder(Hungry);
+
+Remainder(A) = Sum (from k = 1 to d, (pk + nk)/(p + n)*B(pk/(pk + nk)) ) 
+where pk = number of times that the input resulted in a positive outcome and nk = number of times taht the input resulted in a negative outcome. 
+
+so Remainder(Hungry) = 	(5 yesses were good results + 2 yesses were bad results  
+
+
+let q = probability that being hungry results in a yes;
+where B(q) = -( q*log2(q) + (1 - q)*log2(1 - q) );`
+
+so 
+
