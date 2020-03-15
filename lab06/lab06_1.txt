@@ -11,13 +11,9 @@ so B(0.5) = 1;
 and Gain(Hungry) = 1 - Remainder(Hungry);
 
 Remainder(A) = Sum (from k = 1 to d, (pk + nk)/(p + n)*B(pk/(pk + nk)) ) 
-where pk = number of times that the input resulted in a positive outcome and nk = number of times taht the input resulted in a negative outcome. 
+where pk = number of times that the input resulted in a positive outcome and nk = number of times that the input resulted in a negative outcome. 
 
-so Remainder(Hungry) = 	(5 yesses were good results + 2 yesses were bad results  
+so Remainder(Hungry) = 	(5 yesses were good results + 2 yesses were bad results) / (12) * B(5/7) + (1 no was a good result + 4 nos were bad results) / 12 * B(1/5) = 7/12 * (0.8631205686) + 5/12 * 0.7219280949 = 0.8042903712
 
-
-let q = probability that being hungry results in a yes;
-where B(q) = -( q*log2(q) + (1 - q)*log2(1 - q) );`
-
-so 
+so Gain(Hungry) = 1 - 0.8042903712 = 0.1957096288
 

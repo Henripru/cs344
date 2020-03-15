@@ -1,0 +1,48 @@
+Exercise 6.2
+
+Henri Prudhomme
+
+ML problem - model to identify whether an email in Gmail is “important.”
+
+1. We want the machine learned model to:
+identify whether an email in Gmail is “important.”
+
+2. Our ideal outcome is:
+Can successfully identify whether an email in Gmail is “important.”
+
+3a. Our sucess metrics are:
+That important emails are the emails that are actually determined to be important
+
+3b. Our key results (KR) for the success metrics are:
+That the email will be determined to be "important" or "unimportant"
+
+3c. Our ML model is deemed a failure if:
+It cannot consitently identify important emails
+
+4a. The output from our ML model will be:
+a boolean
+
+4b. The output is defined as:
+a classification problem where there is a discrete boolean value to tell whether the email is important or not
+
+5a. The output from the ML model will be made:
+available to an algorithm which shows the user important emails
+
+5b. The outcome will be used for:
+email applications
+
+6. If we didn't use ML, we would:
+use a bayesain approach
+
+7a. Our problem is best framed as:
+a binary classification
+
+8. 
+rows consist of a email. output is a boolean value whether important or not
+
+9. 
+inputs are sender, subject, and body of email
+
+10. 
+'henripru@gmail.com', 'Calvin Cs344 Help', 'hello professor, i need some help' -> important
+'junk@asdf.qwasdfoas', 'Check this CRAZY Thing!!!', 'You havent seen anything like this before!!!!!' -> nonimportant
