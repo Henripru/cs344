@@ -1,0 +1,44 @@
+Exercise 7.3
+
+a. 
+TASK 1
+
+Best RMSE: 131
+
+california_housing_dataframe["rooms_per_person"] = (california_housing_dataframe["total_rooms"] / california_housing_dataframe["population"])
+
+calibration_data = train_model(
+    learning_rate=0.05,
+    steps=500,
+    batch_size=5,
+    input_feature="rooms_per_person"
+)
+
+Comments: I found the same values as the solution!
+
+TASK 2
+
+Solution:
+
+plt.scatter(calibration_data["predictions"], calibration_data["targets"]
+
+there are definitely some outliers at the >2000 range of values given that there are only 7 points out there. We should trim those...
+
+
+TASK 3
+
+Solution: 
+
+Best RMSE: 108
+
+california_housing_dataframe["rooms_per_person"] = (california_housing_dataframe["rooms_per_person"]).apply(lambda x: min(x, 5))
+calibration_data = train_model(
+	learning_rate=0.05,
+	steps=500,
+	batch_size=5,
+	input_feature="rooms_per_person"
+)
+
+b. The purpose of introducing synthetic features is to make it so that we can explore relationships between different variables in a system. With the Colab example, we compared median house value to block density by creating a ratio called rooms_per_person which was a ration of the total_rooms and population. 
+
+c. Outliers are bits of data that stand out among a dataset that are far from being close to average values. So if we had a crowd of people wearing monochrome shirts, and there was one man wearing a neon pink shirt, he would be the outlier. When we get outliers we trim them from the dataset so that our generalizations that we end up coming to about the dataset are as close as they can be to the average element in a dataset.  

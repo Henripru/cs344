@@ -1,0 +1,11 @@
+Excercise 7.1 
+
+a. 
+Ex1. cities['Large and Saintly'] = (cities['City name'].apply(lambda name: name.startswith('San'))) & ( cities['City name'] > 50)
+Ex2. cities.reindex(np.random.permutation([1, 2, 3, 4])
+
+b. One would want to use pandas because it organizes its data into Dataframes and Series. While numpy only uses simple arrays. Data manipulation is far easier.
+
+c. It is useful to reorder/shuffle a Pandas DataFrame because it easy to quickly create new training data without having to go and manually look up or create it by hand.
+
+

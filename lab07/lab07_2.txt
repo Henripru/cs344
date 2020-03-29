@@ -1,0 +1,41 @@
+Exercise 7.2
+
+a. Categorical data is data that is qualitiative and describes the color, or shape, or brand, etc. whereas Numerical data is quantitiative data which is described with numbers which are generally continuous.
+
+b.
+TASK 1
+I found that 
+train_model(
+	learning_rate=0.0001,
+	steps=100,
+	batch_size=1
+)
+worked very well and resulted in a nice curve which approached a limit around 160 RMSE
+
+Additionally, large batch sizes seemed to raise the plateau for RMSE limit so, the lower the better in this instance
+
+TASK 2
+I found that 
+train_model(
+	learning_rate=0.1,
+	steps=100,
+	batch_size=100,
+	input_parameter="median_income"
+)
+worked extremely well with a converging number of around 80 RMSE.
+
+c. The hyper parameters for this function were the learning_rate, steps, and batch_size parameters of the function that was constructed through the lesson. 
+
+There is a set of rules of thumb which help speed up the process of model tuning. They are the following:
+- In a plot of training error over periods the training error curve shoudl steadily decrease steeply at first, and then eventually plateu as training converges.
+- If teh training has not converged, try running for longer.
+- If the training error decreases too slowly, increasing the learning rate can help increase the speed (sometimes)
+	- but the rate can also decrease too fast in which case the learning rate is too high
+- If traning error jumps around, decrease the learning rate
+	- lower learning rate + larger number of steps or batch size is a good combo
+- very small batch sizes cause instability. Always start from something like 100 or 1000 and then decrease the number until there is significant degredation in the RMSE curve
+
+Finally, always experiment and VERIFY.
+
+
+
