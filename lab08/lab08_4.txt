@@ -1,0 +1,11 @@
+Henri Prudhomme
+
+Excersise 8.4
+
+a. The score enabled you to get a very reliable estimate of the accuracty of your model.
+
+b. If you use data values with wildly different ranges, the the k score of your model will inherently increase as it gets proportionally smaller as the range gets bigger.
+
+c. Yes. Suppose I had a small dataset with a large network: If the network was large enough, it could overfit the data so well that it would just spit out the answer for any input instead of computing it. Hence we want a small network so that we can understand relations between variables instead of just create a input output machine.
+
+d. I could not get those keras examples to work, so I am writing about the theoretical behaviors of changing the networks. If you increased the number of layers, the K validation score would get better. This is because we are creating a more complex model and it will be able to fit data better. I do not know how changing the units per layer would affect the outome.

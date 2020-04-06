@@ -1,0 +1,45 @@
+Henri Prudhomme
+
+8.2 Exercise
+
+a. Instead of using the learning rate parameter, it uses steps per period to control its learning rate.
+
+b. Binning allows qualitative data to be quantified. It turns colors and shapes into numbers so that the algorithm can perform mathematical operations with features that it otherwise wouldnt be able to use.
+
+
+Task 1: 
+# Divide households into 7 buckets.
+  bucketized_households = tf.feature_column.bucketized_column(
+    households, boundaries=get_quantile_based_boundaries(
+      training_examples["households"], 7))
+
+  # Divide longitude into 10 buckets.
+  bucketized_longitude = tf.feature_column.bucketized_column(
+    longitude, boundaries=get_quantile_based_boundaries(
+      training_examples["longitude"], 10))
+  
+  # Divide latitude into 10 buckets.
+  bucketized_latitude = tf.feature_column.bucketized_column(
+    latitude, boundaries=get_quantile_based_boundaries(
+      training_examples["latitude"], 10))
+
+  # Divide housing_median_age into 7 buckets.
+  bucketized_housing_median_age = tf.feature_column.bucketized_column(
+    housing_median_age, boundaries=get_quantile_based_boundaries(
+      training_examples["housing_median_age"], 7))
+  
+  # Divide median_income into 7 buckets.
+  bucketized_median_income = tf.feature_column.bucketized_column(
+    median_income, boundaries=get_quantile_based_boundaries(
+      training_examples["median_income"], 7))
+  
+  # Divide rooms_per_person into 7 buckets.
+  bucketized_rooms_per_person = tf.feature_column.bucketized_column(
+    rooms_per_person, boundaries=get_quantile_based_boundaries(
+      training_examples["rooms_per_person"], 7))
+
+Task 2:
+ long_x_lat = tf.feature_column.crossed_column(
+  set([bucketized_longitude, bucketized_latitude]), hash_bucket_size=1000) 
+
+

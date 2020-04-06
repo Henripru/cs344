@@ -1,0 +1,27 @@
+Henri Prudhomme
+
+Task 1:
+I couldn't spot anything particularly erroneous, however, there did seem to be some extreme values for the max of different properties.
+
+Task 2:
+The validation data is all grouped from one partition of california, while the other partition encompasses the training data. In other words, the training data does not accurately represent the validation data.
+
+Task 3:
+As noted in task 2, the data is not randomized. This is because the rp.random.permutation is commented out.
+
+Task 4:
+linear_regressor = train_model(
+    learning_rate=0.00003,
+    steps=500,
+    batch_size=5,
+    training_examples=training_examples,
+    training_targets=training_targets,
+    validation_examples=validation_examples,
+    validation_targets=validation_targets)
+
+Task 5:
+Final RMSE (on test data): 160.82
+
+Summary Paragraph: I learned that there are multiple ways to implement a ML algorithm. You can find relations between one or many variables. There are also a variety of methods for testing the accuracy of the generated model such as graphing and observing the outcomes compared to a predicted outcome. 
+
+
