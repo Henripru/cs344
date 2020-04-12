@@ -1,0 +1,33 @@
+Exersise 9,2
+
+A. We are regularising with respect to sparsity because we want to avoid overfitting and increase efficiency.
+
+B. L1 regularisation increases sparsity because it reduces the number of parameters required by a model to output an answer. 
+
+Task 1: 
+
+linear_classifier = train_linear_classifier_model(
+    learning_rate=0.1,
+    # TWEAK THE REGULARIZATION VALUE BELOW
+    regularization_strength=0.8,
+    steps=300,
+    batch_size=100,
+    feature_columns=construct_feature_columns(),
+    training_examples=training_examples,
+    training_targets=training_targets,
+    validation_examples=validation_examples,
+    validation_targets=validation_targets)
+print("Model size:", model_size(linear_classifier))
+
+
+Training model...
+LogLoss (on validation data):
+  period 00 : 0.33
+  period 01 : 0.29
+  period 02 : 0.27
+  period 03 : 0.26
+  period 04 : 0.25
+  period 05 : 0.25
+  period 06 : 0.24
+Model training finished.
+Model size: 567

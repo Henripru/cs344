@@ -1,0 +1,20 @@
+Excersise 9,1
+
+A. The linear regression approach is terrible. The RMSE is 0.44 in a range of [0, 1].
+
+Task 1: L2 Loss doesnt penalise bad answers very badly. In contrast, LogLoss penalises missing very strongly.
+
+Task 2: Logistic regression is even worse than linear regression as the logistic regressino RMSE is 0.53. Even after adjusting values, I couldn't get the RMSE lower.
+
+Task 3: 
+linear_classifier = train_linear_classifier_model(
+    learning_rate=0.00005,
+    steps=500,
+    batch_size=1000,
+    training_examples=training_examples,
+    training_targets=training_targets,
+    validation_examples=validation_examples,
+    validation_targets=validation_targets)
+
+AUC on the validation set: 0.73
+Accuracy on the validation set: 0.75

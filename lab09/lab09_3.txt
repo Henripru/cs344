@@ -1,0 +1,39 @@
+Henri Prudhommes
+
+1. Using 3 hidden layers we were able to increase the accuracy to 0.9409
+
+model = models.Sequential()
+model.add(layers.Dense(16, activation='relu', input_shape=(10000,)))
+model.add(layers.Dense(16, activation='relu'))
+model.add(layers.Dense(16, activation='relu'))
+model.add(layers.Dense(1, activation='sigmoid'))
+
+model.compile(optimizer='rmsprop',
+              loss='binary_crossentropy',
+              metrics=['accuracy'])
+
+model.fit(x_train, y_train, epochs=4, batch_size=512)
+results = model.evaluate(x_test, y_test)
+
+2. Using layers with more hidden units (i used 32), we were able to increase the accuracy to 0.9463
+
+model = models.Sequential()
+model.add(layers.Dense(32, activation='relu', input_shape=(10000,)))
+model.add(layers.Dense(32, activation='relu'))
+model.add(layers.Dense(32, activation='relu'))
+model.add(layers.Dense(1, activation='sigmoid'))
+
+model.compile(optimizer='rmsprop',
+              loss='binary_crossentropy',
+              metrics=['accuracy'])
+
+model.fit(x_train, y_train, epochs=4, batch_size=512)
+results = model.evaluate(x_test, y_test)
+
+3. Using mse to compute loss instead of binary_crossentropy, the accuracy marginally increased to 0.9464
+
+4. Using the tanh activation, the accuracy increased again to 0.9490, almost reaching the "state of the art" 95 percent mark.
+
+
+
+
