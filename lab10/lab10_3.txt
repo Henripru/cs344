@@ -1,0 +1,11 @@
+a. What does the confusion matrix show for this example?
+The confusion matrix shows which classes were misclassified as other classes.
+In this example, it shows  7 and 9 can get confused for one another
+
+b. How does the TensorFlow network architecture differ from the Keras example given in class? Report any improvements you can make over the baseline testset accuracy for this task.
+In tensorflow we had to more precisely define the parameters for the model. With Keras we could just add layers which was much easier.
+
+My best accuracy was 0.94
+
+c. What differences can you see between the visualizations for 10 steps and 1000 steps?
+The image gets clearer as I increase the number of steps.

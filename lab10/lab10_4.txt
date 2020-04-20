@@ -1,0 +1,14 @@
+Exercise 1:
+What’s the size/shape of the cats/dogs datasets?
+total training cat images: 1000
+total training dog images: 1000
+total validation cat images: 500
+total validation dog images: 500
+
+How does the first CNN compare with the one we did in class.
+3 convolutional layers using relu.
+they use 16, 32, 64 for the layers.
+both flatten the image.
+
+Can you see any interesting patterns in the intermediate representations?
+Yes. The major shapes in the pictures are maintained even as the resolution decreases.
