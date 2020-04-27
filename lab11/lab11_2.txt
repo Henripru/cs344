@@ -1,0 +1,8 @@
+Task 1: What are the biases present in the given dataset?
+There is a data skew in gender as we would expect it to be 50/50 but instead there are more men than women
+Task 2: Assess the potential bias in some other feature besides education level.
+There is a bias in marital_status. I would expect to see 50/50 representation for each category, but there are always more men, divorced, married-spouse-absent, never-married, separated, and widowed
+Task 3: Do as written.
+
+Task 4: Do you find disparities when you look at race rather than gender? If so, which way to they skew?
+In looking at race, the model has more false positives when evaluating blacks tahn whites.

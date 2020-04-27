@@ -1,0 +1,11 @@
+Task 1: Is a linear model ever preferable to a deep NN model?
+I think that it all depends on the task that learning is being applied to. If it is relatively simple, a linear model may be enough to accurately predict values. But if there are many factors involved in a model. Deep learning probably will more often than not be the best solution.
+Task 2: Does the NN model do better than the linear model?
+Yes. It does better. (6 percent more accurate)
+Task 3: Do embeddings do much good for sentiment analysis tasks?
+Nope. Was even worse than linear classifier
+Tasks 4–5: Name two words that have similar embeddings and explain why that makes sense.
+{bad, disappointing} both words have negative meaning which would both be used in a similar fashion to express an unfavorable opinion in a movie review.
+Task 6: Report your best hyper-parameters and their resulting performance.
+All code was kept the same except I used the AdamOptimizer with a learning_rate = 0.01)
+Best Accuracy = 0.87
