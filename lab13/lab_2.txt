@@ -1,0 +1,24 @@
+/*Exercise 3.2*/
+
+on(a, b).
+on(b, c).
+on(table, c).
+above(X, Y) :- on(X, Y).
+above(X, Y) :- above(X, Z), above(Z, Y).
+
+/*Proof of above(a, table).*/
+above(a, table) if on(a, table). NO
+above(a, table) if above(a, Z) and above(Z, table).
+    above(a, Z) if on(a, Z).
+        Z = b.
+    above(b, table) if above(b, table).
+
+above(b, table) if on(b, table). NO
+above(b, table) if above(b, Z) and above(Z, table).
+    above(b, Z) if on(b, Z).
+        Z = c.
+    above(c, table) if above(c, table).
+
+above(c, table) if on(c, table). YES.
+
+Hence above(a, table) is true.
