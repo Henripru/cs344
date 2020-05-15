@@ -8,15 +8,15 @@ White King is 6.    Black King is 16.
 Empty Slot is 0.
 
 Example: 
-compute([
-    [12, 13, 14, 15, 16, 14, 13, 12],
-    [11, 11, 11, 11, 11, 11, 11, 11],
-    [ 0,  0,  0,  0,  0,  0,  0,  0],
-    [ 0,  0,  0,  0,  0,  0,  0,  0],
-    [ 0,  0,  0,  0,  1,  0,  0,  0],
-    [ 0,  0,  0,  0,  0,  0,  0,  0],
-    [ 1,  1,  1,  1,  0,  1,  1,  1],
-    [ 2,  3,  4,  5,  6,  4,  3,  2]
+loadBoard([
+[12, 13, 14, 15, 16, 14, 13, 12],
+[11, 11, 11, 11, 11, 11, 11, 11],
+[ 0,  0,  0,  0,  0,  0,  0,  0],
+[ 0,  0,  0,  0,  0,  0,  0,  0],
+[ 0,  0,  0,  0,  1,  0,  0,  0],
+[ 0,  0,  0,  0,  0,  0,  0,  0],
+[ 1,  1,  1,  1,  0,  1,  1,  1],
+[ 2,  3,  4,  5,  6,  4,  3,  2]
 ]).
 
 How to test chessboard state:
@@ -55,12 +55,18 @@ recordPositionsInRow([Piece|RestOfRow], RowIndex, ColIndex) :-
 
 % Base definition.
 % We set -1 so that indexing starts at 0.
-parseInitialState([], -1).
+loadRows([], -1).
 % Recursive definition.
-parseInitialState([Row|RestOfBoard], RowIndex) :-
-    parseInitialState(RestOfBoard, RowTemp),
+loadRows([Row|RestOfBoard], RowIndex) :-
+    loadRows(RestOfBoard, RowTemp),
     RowIndex is RowTemp + 1,
     recordPositionsInRow(Row, RowIndex, _).
+
+loadBoard(Board) :-
+    loadRows(Board, _).
+
+unloadBoard() :-
+    retractall(position(_,_,_)).
 
 /*
 Method for determining piece color
@@ -79,13 +85,6 @@ switchColor(white, OtherColor) :-
     OtherColor = black.
 switchColor(black, OtherColor) :-
     OtherColor = white.
-
-
-/*
-Method for getting piece at point(X, Y).
-*/
-getPieceAt(Piece, X, Y) :-
-    position(Piece, X, Y).
 
 /*
 Method for getting individual values from list of of pieceData
@@ -126,30 +125,86 @@ findMoves([PieceData|RestOfPiecesList]) :-
 /*
 Method for generating possible next moves
 */
-generateAllMoves(Color) :-
+generateAllMoves(Color, PossibleMovesList) :-
     findall([X, Y, Z], (position(X, Y, Z), ((Color = black, X > 10); (Color = white, X > 0, X < 10))), PiecesList),
-    findMoves(PiecesList).
+    findMoves(PiecesList),
+    findall([[A, B],[C, D]], possibleMove(A, B, C, D), PossibleMovesList),
+    retractall(possibleMove(_,_,_,_)).
 
+generateNewBoards([], _, _).
+generateNewBoards([Move|RestOfPossibleMovesList], TemplateBoard, [NewBoard|BoardVec]) :-
+    clone(TemplateBoard, NewBoardTemp),
+    applyMoveToBoard(Move, NewBoardTemp, NewBoard).
+
+
+%applyMoveToBoard(Move, Board, OutputBoard) :-
+%    .
+
+getPieceValue(Element, Value) :-
+    (Element =:= 1 -> Value is 1;
+    (Element =:= 2 -> Value is 5;
+    (Element =:= 3 -> Value is 3;
+    (Element =:= 4 -> Value is 3;
+    (Element =:= 5 -> Value is 9;
+    (Element =:= 6 -> Value is 1000;
+    (Element =:= 11 -> Value is -1;
+    (Element =:= 12 -> Value is -5;
+    (Element =:= 13 -> Value is -3;
+    (Element =:= 14 -> Value is -3;
+    (Element =:= 15 -> Value is -9;
+    (Element =:= 16 -> Value is -1000;
+    (Element =:= 0 -> Value is 0;
+        fail
+    ))))))))))))).
+
+
+scoreRow([], 0).
+scoreRow([Element|RestOfRow], Score) :-
+    scoreRow(RestOfRow, ScoreTemp),
+    getPieceValue(Element, Value),
+    Score is ScoreTemp + Value.
+
+evaluateBoard([], 0).
+evaluateBoard([Row|RestOfBoard], Score) :-
+    evaluateBoard(RestOfBoard, ScoreTemp),
+    scoreRow(Row, ScoreTemp2),
+    Score is ScoreTemp + ScoreTemp2.
 
 /*
 Minimax Method
 */
-/*minimax(0, white, ScoreList,...) :-
-    evaluateBoard(TempScore).
-    .
-minimax(0, black, ScoreList, ...) :-
-    .
-minimax(Depth, Color) :-
-    switchColor(Color, OtherColor),
-    minimax(Depth - 1, OtherColor)
-    .
-*/
+    /*
+minimax(InputBoard, _, 0, _, Score) :-
+    evaluateBoard(InputBoard, Score).
+minimax(InputBoard, ColorToMove, Depth, BestMove, Score) :-
+    % Copy so that we are working on our own copy of the board.
+    clone(InputBoard, CurrentBoard),
 
+    % Load our board and get the possible moves list
+    loadBoard(CurrentBoard),
+    switchColor(ColorToMove, NextColor),
+    generateAllMoves(NextColor, PossibleMovesList),
+    
+    % Unload our board now that we have all the information we need in lists
+    unloadBoard(),
+
+    % Create vector of new boards using different moves from PossibleMovesList
+    generateNewBoards(PossibleMovesList, CurrentBoard, BoardsVec),
+
+    % 
+
+    
+    minimax(CurrentBoard, NextColor, TempDepth, BestMoveTemp, ScoreTemp),
+    Depth is TempDepth - 1,
+    */
+    
 
 /*
 Main method called to run chess solver
 */
-compute(Board) :-
-    parseInitialState(Board, _).
+%compute(Board) :-
+%    minimax(Board, black, Depth, BestMove, Score),
+ %   write(BestMove), nl,
+ %   write(Score), nl.
     /*,
     minimax(2, black, ...).*/
