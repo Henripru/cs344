@@ -1,29 +1,4 @@
 /*
-White Pawn is 1.    Black Pawn is 11.
-White Rook is 2.    Black Rook is 12.
-White Knight is 3.  Black Knight is 13.
-White Bishop is 4.  Black Bishop is 14.
-White Queen is 5.   Black Queen is 15.
-White King is 6.    Black King is 16.
-Empty Slot is 0.
-
-Example: 
-loadBoard([
-[12, 13, 14, 15, 16, 14, 13, 12],
-[11, 11, 11, 11, 11, 11, 11, 11],
-[ 0,  0,  0,  0,  0,  0,  0,  0],
-[ 0,  0,  0,  0,  0,  0,  0,  0],
-[ 0,  0,  0,  0,  1,  0,  0,  0],
-[ 0,  0,  0,  0,  0,  0,  0,  0],
-[ 1,  1,  1,  1,  0,  1,  1,  1],
-[ 2,  3,  4,  5,  6,  4,  3,  2]
-]).
-
-How to test chessboard state:
-position(Z_OccupiedBy, X_Row, Y_Col).
-*/
-
-/*
 Method for creating facts with corresponding list index
 Main Source: https://stackoverflow.com/a/4381254/6902388
 */
@@ -37,7 +12,8 @@ y([Element|RestOfList], I) :-
 x(List) :-
     y(List, X).
 */
-% make methods dynamic so that we can call newly asserted facts from functions
+
+/* make methods dynamic so that we can call newly asserted facts from functions */
 :- dynamic(position/3).
 :- dynamic(possibleMove/4).
 
@@ -122,6 +98,8 @@ findMoves([PieceData|RestOfPiecesList]) :-
     ;true
     ).
 
+
+
 /*
 Method for generating possible next moves
 */
@@ -131,15 +109,21 @@ generateAllMoves(Color, PossibleMovesList) :-
     findall([[A, B],[C, D]], possibleMove(A, B, C, D), PossibleMovesList),
     retractall(possibleMove(_,_,_,_)).
 
-generateNewBoards([], _, _).
-generateNewBoards([Move|RestOfPossibleMovesList], TemplateBoard, [NewBoard|BoardVec]) :-
-    clone(TemplateBoard, NewBoardTemp),
-    applyMoveToBoard(Move, NewBoardTemp, NewBoard).
+/*
+Methods for generating new board states
+*/
+applyMoveToBoard(Move, Board, OutputBoard) :-
+    OutputBoard = Board.
+
+generateNewBoards(PossibleMovesList, TemplateBoard, BoardVec) :-
+    findall(    [ProducedBoard],
+            (   member(Move, PossibleMovesList), applyMoveToBoard(Move, TemplateBoard, ProducedBoard)),
+                BoardVec).
 
 
-%applyMoveToBoard(Move, Board, OutputBoard) :-
-%    .
-
+/*
+Board Scoring Methods. Used to find heuristic of board position
+*/
 getPieceValue(Element, Value) :-
     (Element =:= 1 -> Value is 1;
     (Element =:= 2 -> Value is 5;
@@ -157,7 +141,6 @@ getPieceValue(Element, Value) :-
         fail
     ))))))))))))).
 
-
 scoreRow([], 0).
 scoreRow([Element|RestOfRow], Score) :-
     scoreRow(RestOfRow, ScoreTemp),
@@ -173,38 +156,47 @@ evaluateBoard([Row|RestOfBoard], Score) :-
 /*
 Minimax Method
 */
-    /*
-minimax(InputBoard, _, 0, _, Score) :-
-    evaluateBoard(InputBoard, Score).
-minimax(InputBoard, ColorToMove, Depth, BestMove, Score) :-
-    % Copy so that we are working on our own copy of the board.
-    clone(InputBoard, CurrentBoard),
-
-    % Load our board and get the possible moves list
-    loadBoard(CurrentBoard),
+minimax(Board, _, 0, _, Score) :-
+    evaluateBoard(Board, Score).
+minimax(Board, ColorToMove, Depth, BestMove, Score) :-
+    /* Load our board and get the possible moves list */
+    loadBoard(Board),
     switchColor(ColorToMove, NextColor),
     generateAllMoves(NextColor, PossibleMovesList),
-    
-    % Unload our board now that we have all the information we need in lists
+    /* Unload our board now that we have all the information we need in lists */
     unloadBoard(),
-
-    % Create vector of new boards using different moves from PossibleMovesList
-    generateNewBoards(PossibleMovesList, CurrentBoard, BoardsVec),
-
-    % 
-
-    
-    minimax(CurrentBoard, NextColor, TempDepth, BestMoveTemp, ScoreTemp),
-    Depth is TempDepth - 1,
-    */
+    /* Create vector of new boards using different moves from PossibleMovesList*/
+    generateNewBoards(PossibleMovesList, Board, BoardsVec).
+    /* Run minimax on all new boards and get list of [bestMove,score]. */
+    /* Set Score based on min or max of list and ColorToMove */
     
 
 /*
 Main method called to run chess solver
 */
-%compute(Board) :-
-%    minimax(Board, black, Depth, BestMove, Score),
- %   write(BestMove), nl,
- %   write(Score), nl.
-    /*,
-    minimax(2, black, ...).*/
+compute(Board) :-
+    minimax(Board, black, 3, BestMove, Score),
+    write(BestMove), nl,
+    write(Score), nl.
+
+/*
+White Pawn is 1.    Black Pawn is 11.
+White Rook is 2.    Black Rook is 12.
+White Knight is 3.  Black Knight is 13.
+White Bishop is 4.  Black Bishop is 14.
+White Queen is 5.   Black Queen is 15.
+White King is 6.    Black King is 16.
+Empty Slot is 0.
+
+Example: 
+compute([
+[12, 13, 14, 15, 16, 14, 13, 12],
+[11, 11, 11, 11, 11, 11, 11, 11],
+[ 0,  0,  0,  0,  0,  0,  0,  0],
+[ 0,  0,  0,  0,  0,  0,  0,  0],
+[ 0,  0,  0,  0,  1,  0,  0,  0],
+[ 0,  0,  0,  0,  0,  0,  0,  0],
+[ 1,  1,  1,  1,  0,  1,  1,  1],
+[ 2,  3,  4,  5,  6,  4,  3,  2]
+]).
+*/
