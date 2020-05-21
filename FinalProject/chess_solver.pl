@@ -211,9 +211,109 @@ findMoves([PieceData|RestOfPiecesList]) :-
         C8 is PieceCol - 2,
         forall((position(T8, R8, C8), T8 < 10),
             asserta(possibleMove(PieceRow, PieceCol, R8, C8))
-        )
+        );
+    % white king
+    (Piece =:= 6 ->
+        % step
+        R1 is PieceRow + 1,
+        C1 is PieceCol + 1,
+        forall((position(T1, R1, C1), (T1 > 10; T1 =:= 0)),
+            asserta(possibleMove(PieceRow, PieceCol, R1, C1))
+        ),
+
+        R2 is PieceRow + 1,
+        C2 is PieceCol - 1,
+        forall((position(T2, R2, C2), (T2 > 10; T2 =:= 0)),
+            asserta(possibleMove(PieceRow, PieceCol, R2, C2))
+        ),
+
+        R3 is PieceRow - 1,
+        C3 is PieceCol + 1,
+        forall((position(T3, R3, C3), (T3 > 10; T3 =:= 0)),
+            asserta(possibleMove(PieceRow, PieceCol, R3, C3))
+        ),
+
+        R4 is PieceRow - 1,
+        C4 is PieceCol - 1,
+        forall((position(T4, R4, C4), (T4 > 10; T4 =:= 0)),
+            asserta(possibleMove(PieceRow, PieceCol, R4, C4))
+        ),
+
+        R5 is PieceRow + 1,
+        C5 is PieceCol + 0,
+        forall((position(T5, R5, C5), (T5 > 10; T5 =:= 0)),
+            asserta(possibleMove(PieceRow, PieceCol, R5, C5))
+        ),
+
+        R6 is PieceRow - 1,
+        C6 is PieceCol + 0,
+        forall((position(T6, R6, C6), (T6 > 10; T6 =:= 0)),
+            asserta(possibleMove(PieceRow, PieceCol, R6, C6))
+        ),
+
+        R7 is PieceRow + 0,
+        C7 is PieceCol + 1,
+        forall((position(T7, R7, C7), (T7 > 10; T7 =:= 0)),
+            asserta(possibleMove(PieceRow, PieceCol, R7, C7))
+        ),
+
+        R8 is PieceRow + 0,
+        C8 is PieceCol - 1,
+        forall((position(T8, R8, C8), (T8 > 10; T8 =:= 0)),
+            asserta(possibleMove(PieceRow, PieceCol, R8, C8))
+        );
+    % black king
+    (Piece =:= 16 ->
+        % step
+        R1 is PieceRow + 1,
+        C1 is PieceCol + 1,
+        forall((position(T1, R1, C1), T1 < 10),
+            asserta(possibleMove(PieceRow, PieceCol, R1, C1))
+        ),
+
+        R2 is PieceRow + 1,
+        C2 is PieceCol - 1,
+        forall((position(T2, R2, C2), T2 < 10),
+            asserta(possibleMove(PieceRow, PieceCol, R2, C2))
+        ),
+
+        R3 is PieceRow - 1,
+        C3 is PieceCol + 1,
+        forall((position(T3, R3, C3), T3 < 10),
+            asserta(possibleMove(PieceRow, PieceCol, R3, C3))
+        ),
+
+        R4 is PieceRow - 1,
+        C4 is PieceCol - 1,
+        forall((position(T4, R4, C4), T4 < 10),
+            asserta(possibleMove(PieceRow, PieceCol, R4, C4))
+        ),
+
+        R5 is PieceRow + 1,
+        C5 is PieceCol + 0,
+        forall((position(T5, R5, C5), T5 < 10),
+            asserta(possibleMove(PieceRow, PieceCol, R5, C5))
+        ),
+
+        R6 is PieceRow - 1,
+        C6 is PieceCol + 0,
+        forall((position(T6, R6, C6), T6 < 10),
+            asserta(possibleMove(PieceRow, PieceCol, R6, C6))
+        ),
+
+        R7 is PieceRow + 0,
+        C7 is PieceCol + 1,
+        forall((position(T7, R7, C7), T7 < 10),
+            asserta(possibleMove(PieceRow, PieceCol, R7, C7))
+        ),
+
+        R8 is PieceRow + 0,
+        C8 is PieceCol - 1,
+        forall((position(T8, R8, C8), T8 < 10),
+            asserta(possibleMove(PieceRow, PieceCol, R8, C8))
+        )    
     ;true
-    )))).
+    )))))).
 
 
 
