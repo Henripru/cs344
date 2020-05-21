@@ -94,9 +94,26 @@ findMoves([PieceData|RestOfPiecesList]) :-
         % attack left
         forall((position(T2, R1, C2), T2 > 10),
             asserta(possibleMove(PieceRow, PieceCol, R1, C2))
+        );
+    % black pawn
+    (Piece =:= 11 ->
+        % step
+        R1 is PieceRow - 1,
+        C1 is PieceCol + 1,
+        C2 is PieceCol - 1,
+        (position(0, R1, PieceCol) ->
+            asserta(possibleMove(PieceRow, PieceCol, R1, PieceCol));true
+        ),
+        % attack right
+        forall((position(T1, R1, C1), T1 < 10, T1 > 0),
+            asserta(possibleMove(PieceRow, PieceCol, R1, C1))
+        ),
+        % attack left
+        forall((position(T2, R1, C2), T2 < 10, T2 > 0),
+            asserta(possibleMove(PieceRow, PieceCol, R1, C2))
         )
     ;true
-    ).
+    )).
 
 
 
@@ -110,13 +127,52 @@ generateAllMoves(Color, PossibleMovesList) :-
     retractall(possibleMove(_,_,_,_)).
 
 /*
+Method for inserting element in 2d array 
+Source: https://stackoverflow.com/a/35107574/6902388
+*/
+inserto(_,[],[],_,_).
+inserto(E,[[_|Xs]|Ys],[[E|Xs1]|Ys1],1,1) :-
+                    !,inserto(E,[Xs|Ys],[Xs1|Ys1],0,0).
+
+inserto(E,[[X]|Xs],[[X]|Xs1],0,0) :- 
+                    inserto(E,Xs,Xs1,0,0),!.
+
+inserto(E,[[X|Xs]|Ys],[[X|Xs1]|Ys1],0,0) :- 
+                    inserto(E,[Xs|Ys],[Xs1|Ys1],0,0).  
+
+inserto(E,[[X|Xs]|Ys],[[X|Xs1]|Ys1],N,1) :- 
+                    N1 is N-1,
+                    inserto(E,[Xs|Ys],[Xs1|Ys1],N1,1).                                      
+
+inserto(E,[Xs|Ys],[Xs|Ys1],N,M) :-  
+                    M1 is M-1,
+                    inserto(E,Ys,Ys1,N,M1),!.
+
+/*
 Methods for generating new board states
 */
 applyMoveToBoard(Move, Board, OutputBoard) :-
-    OutputBoard = Board.
+    nth0(0, Move, OldPos),
+    nth0(0, OldPos, OldPosRowInverted),
+    nth0(1, OldPos, OldPosColNormal),
+    nth0(1, Move, NewPos),
+    nth0(0, NewPos, NewPosRowInverted),
+    nth0(1, NewPos, NewPosColNormal),
+
+    OldPosRow is 8 - OldPosRowInverted,
+    OldPosCol is 1 + OldPosColNormal,
+    NewPosRow is 8 - NewPosRowInverted,
+    NewPosCol is 1 + NewPosColNormal,
+
+    nth1(OldPosRow, Board, RowTemp),
+    nth1(OldPosCol, RowTemp, Piece),
+
+    inserto(0, Board, TempBoard, OldPosCol, OldPosRow),
+
+    inserto(Piece, TempBoard, OutputBoard, NewPosCol, NewPosRow).
 
 generateNewBoards(PossibleMovesList, TemplateBoard, BoardVec) :-
-    findall(    [ProducedBoard],
+    findall(    ProducedBoard,
             (   member(Move, PossibleMovesList), applyMoveToBoard(Move, TemplateBoard, ProducedBoard)),
                 BoardVec).
 
@@ -125,19 +181,19 @@ generateNewBoards(PossibleMovesList, TemplateBoard, BoardVec) :-
 Board Scoring Methods. Used to find heuristic of board position
 */
 getPieceValue(Element, Value) :-
+    (Element =:= 0 -> Value is 0;
     (Element =:= 1 -> Value is 1;
+    (Element =:= 11 -> Value is -1;
     (Element =:= 2 -> Value is 5;
     (Element =:= 3 -> Value is 3;
     (Element =:= 4 -> Value is 3;
-    (Element =:= 5 -> Value is 9;
-    (Element =:= 6 -> Value is 1000;
-    (Element =:= 11 -> Value is -1;
     (Element =:= 12 -> Value is -5;
     (Element =:= 13 -> Value is -3;
     (Element =:= 14 -> Value is -3;
+    (Element =:= 5 -> Value is 9;
+    (Element =:= 6 -> Value is 1000;
     (Element =:= 15 -> Value is -9;
     (Element =:= 16 -> Value is -1000;
-    (Element =:= 0 -> Value is 0;
         fail
     ))))))))))))).
 
@@ -156,27 +212,62 @@ evaluateBoard([Row|RestOfBoard], Score) :-
 /*
 Minimax Method
 */
+getMinimaxResults([], _, _, []).
+getMinimaxResults([Board|BoardsVec], ColorToMove, Depth, [Result|ResultList]):-
+    getMinimaxResults(BoardsVec, ColorToMove, Depth, ResultList),
+    minimax(Board, ColorToMove, Depth, _, Score),
+    Result = [Board, Score].
+
+chooseMax([], _,-10000).
+chooseMax([Element|List], BestMove, Score):-
+    chooseMax(List, BestMoveTempTemp, ScoreTemp),
+    nth0(0, Element, BestMoveTemp),
+    nth0(1, Element, ValueTemp),
+    (ValueTemp>ScoreTemp -> Score is ValueTemp, BestMove = BestMoveTemp; Score is ScoreTemp, BestMove = BestMoveTempTemp).
+
+chooseMin([], _,10000).
+chooseMin([Element|List], BestMove, Score):-
+    chooseMin(List, BestMoveTempTemp, ScoreTemp),
+    nth0(0, Element, BestMoveTemp),
+    nth0(1, Element, ValueTemp),
+    (ValueTemp<ScoreTemp -> Score is ValueTemp, BestMove = BestMoveTemp; Score is ScoreTemp, BestMove = BestMoveTempTemp).
+
+
+
 minimax(Board, _, 0, _, Score) :-
     evaluateBoard(Board, Score).
 minimax(Board, ColorToMove, Depth, BestMove, Score) :-
     /* Load our board and get the possible moves list */
     loadBoard(Board),
     switchColor(ColorToMove, NextColor),
-    generateAllMoves(NextColor, PossibleMovesList),
+    generateAllMoves(ColorToMove, PossibleMovesList),
     /* Unload our board now that we have all the information we need in lists */
     unloadBoard(),
-    /* Create vector of new boards using different moves from PossibleMovesList*/
-    generateNewBoards(PossibleMovesList, Board, BoardsVec).
+    /* Create vector of new boards using different moves from PossibleMovesList */
+    generateNewBoards(PossibleMovesList, Board, BoardsVec),
     /* Run minimax on all new boards and get list of [bestMove,score]. */
+    DepthTemp is Depth - 1,
+    getMinimaxResults(BoardsVec, NextColor, DepthTemp, ResultList),
     /* Set Score based on min or max of list and ColorToMove */
-    
+    (ColorToMove = black ->
+        chooseMin(ResultList, BestMove, Score)
+    ;
+        chooseMax(ResultList, BestMove, Score)
+    ).
+
+printBoard([]).
+printBoard([Row|Board]):-
+    write(Row),
+    write("\n"),
+    printBoard(Board).
+
 
 /*
 Main method called to run chess solver
 */
-compute(Board) :-
-    minimax(Board, black, 3, BestMove, Score),
-    write(BestMove), nl,
+compute(Board, ColorToPlay) :-
+    minimax(Board, ColorToPlay, 3, BestMove, Score),
+    printBoard(BestMove), nl,
     write(Score), nl.
 
 /*
@@ -190,13 +281,13 @@ Empty Slot is 0.
 
 Example: 
 compute([
-[12, 13, 14, 15, 16, 14, 13, 12],
-[11, 11, 11, 11, 11, 11, 11, 11],
+[12, 13, 14,  0, 16, 14, 13, 12],
+[11, 11, 11,  0, 11, 11, 11, 11],
 [ 0,  0,  0,  0,  0,  0,  0,  0],
-[ 0,  0,  0,  0,  0,  0,  0,  0],
-[ 0,  0,  0,  0,  1,  0,  0,  0],
+[ 0,  0,  0, 11,  0,  15,  0,  0],
+[ 0,  0,  5,  0,  1,  0,  0,  0],
 [ 0,  0,  0,  0,  0,  0,  0,  0],
 [ 1,  1,  1,  1,  0,  1,  1,  1],
-[ 2,  3,  4,  5,  6,  4,  3,  2]
-]).
+[ 2,  3,  4,  0,  6,  4,  3,  2]
+], white).
 */
